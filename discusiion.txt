@@ -1,0 +1,5 @@
+Q1: A class template allows you to create a class that is able to work with any data type in the class.
+Q2: this is a form of a class template that allows us to construct our vector.
+Q3: a form of vector with "int" as its data type.
+Q4: The carrots make the vector store the objects pokemon.
+Q5: This is True you need to define class templates typically in the .hpp file.

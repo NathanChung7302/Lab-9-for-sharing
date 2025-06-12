@@ -6,36 +6,62 @@ class vector {
 private:
 	T* data = nullptr;
 	int num_data = 0;
+	int capacity = 0;
+
+	void expand_capacity() {
+		capacity = (capacity == 0) ? 1 : capacity * 2;
+        	T* new_data = new T[capacity];
+        	for (int i = 0; i < num_data; ++i) {
+			new_data[i] = data[i];
+		}
+        	delete[] data;
+        	data = new_data;
+	}
+
 public:
 	vector() = default;
 
 	~vector() {
 		// TODO Implement this function
+		delete[] data;
 	}
 
 	vector(const vector<T>& other) {
 		// TODO Implement this function
+		this->num_data = other.num_data;
+		this->capacity = other.capacity;
+        	this->data = new T[this->capacity];
+        	for (int i = 0; i < this->num_data; ++i) {
+			this->data[i] = other.data[i];
+		}
 	}
 
 	vector<T>& operator=(const vector<T>& other) {
 		// TODO Finish implementing this function
-
+		if (this != &other) {
+			delete[] this->data;
+            		this->num_data = other.num_data;
+			this->capacity = other.capacity;
+            		this->data = new T[this->capacity];
+            		for (int i = 0; i < this->num_data; ++i) {
+			this->data[i] = other.data[i];
+			}
+		}
+	
 		return *this;
 	}
 
 	void push_back(const T& value) {
-		T* new_data = new T[this->num_data + 1];
-		for (int i = 0; i < this->num_data; i++) {
-			new_data[i] = this->data[i];
+		if (num_data == capacity) {
+			expand_capacity();
 		}
-		new_data[this->num_data] = value;
-		delete [] this->data;
-		this->data = new_data;
-		this->num_data++;
+        
+        	data[num_data++] = value;
+
 	}
 
 	int size() const {
-		return this->num_data;
+		return num_data;
 	}
 
 	// TODO Implement an operator[] function. I've written the header for
@@ -45,7 +71,7 @@ public:
 	T& operator[](int index) {
 		// TODO Fix the below line of code. It's incorrect; it's just provided
 		// as a placeholder to make the program compile.
-		return data[0];
+		return data[index];
 	}
 
 	// The insert() function receives a value to insert and the index at which
@@ -57,7 +83,32 @@ public:
 	// come after the newly inserted value)
 	void insert(int index, const T& value) {
 		// TODO Implement this function
+		if (index < 0 || index > num_data) return;
+
+        	if (num_data == capacity) {
+			expand_capacity();
+		}
+        
+        	for (int i = num_data; i > index; --i) {
+			data[i] = data[i - 1];
+		}
+        
+		data[index] = value;
+        	num_data++;
 	}
+
+	void reserve(int new_cap) {
+		if (new_cap > capacity) {
+			T* new_data = new T[new_cap];
+            		for (int i = 0; i < num_data; ++i) {
+				new_data[i] = data[i];
+			}
+            
+            		delete[] data;
+            		data = new_data;
+            		capacity = new_cap;
+		}
+	}	
 };
 
 #endif
